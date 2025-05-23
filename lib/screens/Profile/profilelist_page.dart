@@ -160,13 +160,19 @@ class UsersStream extends StatelessWidget {
         final users = snapshot.data?.docs ?? [];
 
         for (var user in users) {
-          final profile = user['profile'];
-          final name = user['name'];
-          final followers = user['followers'];
-          final following = user['following'];
-          final descr = user['descr'];
-          final posts = user['posts'];
-          final selectedUid = user['userid'];
+          final data = user.data() as Map<String, dynamic>?;
+          final profile = data != null &&
+                  data.containsKey('profile') &&
+                  data['profile'] != null &&
+                  data['profile'] != ''
+              ? data['profile']
+              : 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+          final name = data?['name'] ?? '';
+          final followers = data?['followers'] ?? 0;
+          final following = data?['following'] ?? 0;
+          final descr = data?['descr'] ?? '';
+          final posts = data?['posts'] ?? 0;
+          final selectedUid = data?['userid'] ?? '';
           final currentUser = loggedInUser?.displayName;
           final userBubble = UserBubble(
             descr: descr,
