@@ -6,10 +6,10 @@ import 'package:nallagram/screens/Profile/profile_upload.dart';
 
 final _auth = FirebaseAuth.instance;
 final _store = FirebaseFirestore.instance;
-String _name;
-String _descr;
+String _name = '';
+String _descr = '';
 
-User loggedInUser;
+User? loggedInUser;
 
 class EditPage extends StatefulWidget {
   @override
@@ -80,7 +80,7 @@ class _EditPageState extends State<EditPage> {
                             borderRadius: BorderRadius.circular(32),
                             image: DecorationImage(
                                 image: CachedNetworkImageProvider(
-                                    loggedInUser.photoURL),
+                                    loggedInUser?.photoURL ?? ''),
                                 fit: BoxFit.cover)),
                       ),
                       TextButton(

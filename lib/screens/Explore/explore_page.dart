@@ -75,7 +75,7 @@ class Explore extends StatelessWidget {
 
 class ImageBox extends StatelessWidget {
   final imageUrl;
-  ImageBox({@required this.imageUrl});
+  ImageBox({required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class PostsStream extends StatelessWidget {
             ),
           );
         }
-        final images = snapshot.data.docs;
+        final images = snapshot.data?.docs ?? [];
 
         for (var image in images) {
           final url = image['url'];

@@ -33,11 +33,11 @@ class Activity extends StatelessWidget {
             color: Colors.blueAccent,
             size: 19.0,
           ),
+          onPressed: () {
+            Toast.show("Following list updated!",
+                duration: Toast.lengthShort, gravity: Toast.bottom);
+          },
         ),
-        onTap: () {
-          Toast.show("Following list updated!", context,
-              duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-        },
       );
     }
 

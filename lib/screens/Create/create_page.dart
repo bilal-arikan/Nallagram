@@ -12,29 +12,29 @@ final storage = FirebaseStorage.instance;
 final store = FirebaseFirestore.instance;
 final auth = FirebaseAuth.instance;
 
-User user;
+User? user;
 
 void publishPosts(String place, String posturl) async {
   user = auth.currentUser;
 
   await store.collection('posts').add({
     'likes': 0,
-    'userid': user.uid,
-    'name': user.displayName,
+    'userid': user?.uid,
+    'name': user?.displayName,
     'place': place,
-    'profilepicurl': user.photoURL,
+    'profilepicurl': user?.photoURL,
     'url': posturl,
     'timestamp': FieldValue.serverTimestamp(),
   });
 }
 
 void addUserposts(String place, String posturl) async {
-  await store.collection('users').doc(user.uid).collection('posts').add({
+  await store.collection('users').doc(user?.uid).collection('posts').add({
     'likes': 0,
-    'userid': user.uid,
-    'name': user.displayName,
+    'userid': user?.uid,
+    'name': user?.displayName,
     'place': place,
-    'profilepicurl': user.photoURL,
+    'profilepicurl': user?.photoURL,
     'url': posturl,
     'timestamp': FieldValue.serverTimestamp(),
   });

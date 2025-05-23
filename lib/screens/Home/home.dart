@@ -124,7 +124,7 @@ class PostStream extends StatelessWidget {
             ),
           );
         }
-        final posts = snapshot.data.docs;
+        final posts = snapshot.data?.docs ?? [];
 
         for (var post in posts) {
           // var likedusrs = await Likecheck(post.id);

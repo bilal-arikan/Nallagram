@@ -8,15 +8,16 @@ import 'package:nallagram/screens/Posts/postView_model.dart';
 import 'package:nallagram/screens/Story/storyview.dart';
 import 'package:nallagram/screens/settings/settings.dart';
 
-
 import 'profile_upload.dart';
+
 final _auth = FirebaseAuth.instance;
 final _store = FirebaseFirestore.instance;
 bool _persposts = true;
 
 void getProfileData() async {
-  final info = await _store.collection('users').doc(loggedInUser.uid).get();
-  Map data = info.data();
+  final info =
+      await _store.collection('users').doc(loggedInUser?.uid ?? '').get();
+  Map data = info.data() ?? {};
   followers = data['followers'];
   following = data['following'];
   descr = data['descr'];
@@ -34,10 +35,10 @@ void getCurrentUser() {
   }
 }
 
-int posts;
-var descr;
-int followers;
-int following;
+int posts = 0;
+var descr = '';
+int followers = 0;
+int following = 0;
 
 class Profile extends StatefulWidget {
   @override
@@ -75,7 +76,7 @@ class _ProfileState extends State<Profile> {
                             borderRadius: BorderRadius.circular(25),
                             image: DecorationImage(
                               image: CachedNetworkImageProvider(
-                                  loggedInUser.photoURL),
+                                  loggedInUser?.photoURL ?? ''),
                               fit: BoxFit.cover,
                             )),
                     child: rimage != null
@@ -162,7 +163,7 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              loggedInUser.displayName.toUpperCase(),
+              loggedInUser?.displayName?.toUpperCase() ?? '',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Metropolis',
@@ -201,7 +202,11 @@ class _ProfileState extends State<Profile> {
                   child: Container(
                 child: OutlinedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  AppSettings(),) );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppSettings(),
+                          ));
                     },
                     child: Text(
                       'Settings',
@@ -248,7 +253,7 @@ class Highlights extends StatefulWidget {
   final String name;
   final String url;
 
-  Highlights({@required this.name, @required this.url});
+  Highlights({required this.name, required this.url});
 
   @override
   _HighlightsState createState() => _HighlightsState();
@@ -362,7 +367,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
 class ImagePost extends StatelessWidget {
   final String url;
   final bool isMe = true;
-  ImagePost({@required this.url});
+  ImagePost({required this.url});
   @override
   Widget build(BuildContext context) {
     if (isMe) {
@@ -381,7 +386,7 @@ class ImagePost extends StatelessWidget {
         ),
       );
     }
-  
+    return Container();
   }
 }
 
@@ -391,7 +396,7 @@ class ProfilePostsStream extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: _store
           .collection('users')
-          .doc(loggedInUser.uid)
+          .doc(loggedInUser?.uid ?? '')
           .collection('posts')
           .snapshots(),
       builder: (context, snapshot) {
@@ -403,10 +408,10 @@ class ProfilePostsStream extends StatelessWidget {
             ),
           );
         }
-        final posts = snapshot.data.docs.reversed;
+        final posts = snapshot.data?.docs.reversed ?? [];
 
         for (var post in posts) {
-          if (post['userid'] == loggedInUser.uid) {
+          if (post['userid'] == loggedInUser?.uid) {
             final image = post['url'];
             final imagePost = ImagePost(
               url: image,
@@ -447,7 +452,7 @@ class Highlight extends StatefulWidget {
   final String name;
   final String url;
 
-  Highlight({this.name, this.url});
+  Highlight({required this.name, required this.url});
 
   @override
   _HighlightState createState() => _HighlightState();

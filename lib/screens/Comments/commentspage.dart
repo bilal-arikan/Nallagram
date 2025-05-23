@@ -39,7 +39,7 @@ class CommentsPage extends StatefulWidget {
   static const String id = 'comment_screen';
   final postID;
 
-  CommentsPage({@required this.postID});
+  CommentsPage({required this.postID});
 
   @override
   _CommentsPageState createState() => _CommentsPageState();
@@ -50,7 +50,7 @@ class _CommentsPageState extends State<CommentsPage> {
 
   //initialising firestore
 
-  String commentText;
+  String commentText = '';
 
   @override
   void initState() {
@@ -121,9 +121,9 @@ class _CommentsPageState extends State<CommentsPage> {
                         .doc(widget.postID)
                         .collection('comments')
                         .add({
-                      'name': loggedInUser.displayName,
+                      'name': loggedInUser?.displayName,
                       'comment': commentText,
-                      'profile': loggedInUser.photoURL,
+                      'profile': loggedInUser?.photoURL,
                       'timestamp': FieldValue.serverTimestamp(),
                     });
                     //Implement send functionality.
@@ -151,8 +151,7 @@ class MessageBubble extends StatefulWidget {
   final String url;
   final String sender;
 
-  MessageBubble(
-      {@required this.text, @required this.sender, @required this.url});
+  MessageBubble({required this.text, required this.sender, required this.url});
 
   @override
   State<MessageBubble> createState() => _MessageBubbleState();
@@ -170,7 +169,7 @@ class _MessageBubbleState extends State<MessageBubble> {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(loggedInUser.photoURL),
+                  backgroundImage: NetworkImage(widget.url ?? ''),
                 ),
                 SizedBox(
                   width: 10,
@@ -259,7 +258,7 @@ class _MessageBubbleState extends State<MessageBubble> {
 class MessageStream extends StatelessWidget {
   final postID;
 
-  MessageStream({@required this.postID});
+  MessageStream({required this.postID});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -277,7 +276,7 @@ class MessageStream extends StatelessWidget {
             ),
           );
         }
-        final messages = snapshot.data.docs.reversed;
+        final messages = snapshot.data?.docs.reversed ?? [];
 
         for (var message in messages) {
           final messageText = message['comment'];

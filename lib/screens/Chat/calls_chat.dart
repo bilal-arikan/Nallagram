@@ -8,12 +8,12 @@ import 'package:nallagram/screens/Chat/chat_model.dart';
 
 final _firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
-User _loggedInUser;
+User? _loggedInUser;
 List<String> docList = [];
 void docCheck() async {
   var result = await _firestore
       .collection('users')
-      .doc(_loggedInUser.uid)
+      .doc(_loggedInUser?.uid ?? '')
       .collection('messages')
       .get();
   result.docs.forEach((res) {
@@ -30,7 +30,7 @@ class CallsChat extends StatefulWidget {
 class _CallsChatState extends State<CallsChat> {
   //initialising firestore
 
-  String messageText;
+  String messageText = '';
 
   @override
   void initState() {
@@ -103,12 +103,12 @@ class UserBubble extends StatefulWidget {
   final String selectedUser;
   final bool isMe;
   UserBubble(
-      {@required this.profileUrl,
-      @required this.name,
-      @required this.message,
-      @required this.time,
-      @required this.isMe,
-      @required this.selectedUser});
+      {required this.profileUrl,
+      required this.name,
+      required this.message,
+      required this.time,
+      required this.isMe,
+      required this.selectedUser});
 
   @override
   State<UserBubble> createState() => _UserBubbleState();
@@ -218,18 +218,20 @@ class UsersStream extends StatelessWidget {
             ),
           );
         }
-        final users = snapshot.data.docs;
+        final users = snapshot.data?.docs ?? [];
 
         for (var user in users) {
           final profile = user['profile'];
           final name = user['name'];
           final selectedUid = user['userid'];
-          final currentUser = _loggedInUser.displayName;
+          final currentUser = _loggedInUser?.displayName;
           final userBubble = UserBubble(
             profileUrl: profile,
             selectedUser: selectedUid,
             name: name,
             isMe: currentUser == name,
+            message: '',
+            time: '',
           );
           userBubbles.add(userBubble);
         }

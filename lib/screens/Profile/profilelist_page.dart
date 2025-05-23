@@ -9,7 +9,7 @@ import '../../nav.dart';
 
 final _firestore = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
-final currentUsermail = loggedInUser.email;
+final currentUsermail = loggedInUser?.email;
 
 class ProfileList extends StatelessWidget {
   @override
@@ -42,14 +42,14 @@ class UserBubble extends StatefulWidget {
   final String selectedUser;
   final bool isMe;
   UserBubble(
-      {@required this.profileUrl,
-      @required this.descr,
-      @required this.posts,
-      @required this.followers,
-      @required this.following,
-      @required this.name,
-      @required this.isMe,
-      @required this.selectedUser});
+      {required this.profileUrl,
+      required this.descr,
+      required this.posts,
+      required this.followers,
+      required this.following,
+      required this.name,
+      required this.isMe,
+      required this.selectedUser});
 
   @override
   State<UserBubble> createState() => _UserBubbleState();
@@ -157,7 +157,7 @@ class UsersStream extends StatelessWidget {
             ),
           );
         }
-        final users = snapshot.data.docs;
+        final users = snapshot.data?.docs ?? [];
 
         for (var user in users) {
           final profile = user['profile'];
@@ -167,7 +167,7 @@ class UsersStream extends StatelessWidget {
           final descr = user['descr'];
           final posts = user['posts'];
           final selectedUid = user['userid'];
-          final currentUser = loggedInUser.displayName;
+          final currentUser = loggedInUser?.displayName;
           final userBubble = UserBubble(
             descr: descr,
             followers: followers,

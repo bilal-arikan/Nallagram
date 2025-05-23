@@ -12,7 +12,7 @@ import 'screens/Chat/chat_home.dart';
 import 'screens/Profile/profile.dart';
 
 final _auth = FirebaseAuth.instance;
-User loggedInUser = _auth.currentUser;
+User? loggedInUser = _auth.currentUser;
 
 class Nav extends StatefulWidget {
   static const String id = 'nav';
